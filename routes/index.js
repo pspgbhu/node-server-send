@@ -1,7 +1,9 @@
-const router = require('koa-router')()
+const router = require('koa-router')();
 
-router.get('/', async (ctx, next) => {
-  ctx.body = 'koa2 string'
-})
+const client = require('./client');
+const server = require('./server');
 
-module.exports = router
+router.use(client.routes(), client.allowedMethods());
+router.use(server.routes(), server.allowedMethods());
+
+module.exports = router;
