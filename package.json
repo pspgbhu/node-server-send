@@ -1,0 +1,21 @@
+{
+  "name": "sharp-xiaole-node",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "pm2 start config/pm2.dev.config.json && pm2 logs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.jd.com/smart-fe/sharp-xiaole-node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "dependencies": {
+    "koa": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.43",
+    "@types/node": "^8.5.2"
+  }
+}
