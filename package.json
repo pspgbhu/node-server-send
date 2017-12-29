@@ -12,10 +12,12 @@
   "keywords": [],
   "author": "",
   "dependencies": {
-    "koa": "^2.4.1"
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0"
   },
   "devDependencies": {
     "@types/koa": "^2.0.43",
+    "@types/koa-bodyparser": "^3.0.26",
     "@types/node": "^8.5.2"
   }
 }
