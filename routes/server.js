@@ -1,10 +1,11 @@
 const router = require('koa-router')();
+const SelfEvents = require('../common/SelfEvents');
 
 router.prefix('/server');
 
 router
-  .get('/', async (ctx) => {
-    ctx.body = 'index';
+  .get('/test', async (ctx) => {
+
   })
 ;
 
