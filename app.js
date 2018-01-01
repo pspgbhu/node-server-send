@@ -4,8 +4,12 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+const cors = require('./middlewares/cors');
 
-const index = require('./routes/index');
+const routeClient = require('./routes/client');
+const routeServer = require('./routes/server');
+
+global.db = {};
 
 // error handler
 onerror(app);
@@ -17,7 +21,7 @@ app.use(bodyparser({
 app.use(json());
 app.use(logger());
 
-app.use(require('koa-static')(__dirname + '/public'))
+// app.use(require('koa-static')(__dirname + '/public'))
 
 // logger
 app.use(async (ctx, next) => {
@@ -27,7 +31,10 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
+app.use(cors());
+
 // routes
-app.use(index.routes(), index.allowedMethods());
+app.use(routeClient.routes(), routeClient.allowedMethods());
+app.use(routeServer.routes(), routeServer.allowedMethods());
 
 module.exports = app;
