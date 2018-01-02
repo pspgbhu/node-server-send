@@ -12,6 +12,7 @@ router
     ctx.type = 'text/event-stream; charset=utf-8';
     ctx.set('Cache-Control', 'no-cache');
     ctx.set('Connection', 'keep-alive');
+    ctx.set('X-Accel-Buffering', 'no');
 
     const body = ctx.body = new sse();
 
