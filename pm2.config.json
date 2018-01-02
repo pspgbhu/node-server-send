@@ -1,0 +1,14 @@
+{
+  "name"   : "sku_scratch",
+  "script" : "bin/www",
+  "watch": true,
+  "env": {
+      "NODE_ENV": "development",
+      "PORT": "1601"
+  },
+  "out_file": "/export/Logs/sku-scratch/out.log",
+  "error_file": "/export/Logs/sku-scratch/err.log",
+  "merge_logs": true,
+  "log_date_format": "YYYY-MM-DD HH:mm Z",
+  "max_memory_restart" : "512M"
+}
