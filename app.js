@@ -4,6 +4,7 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+const sseHeader = require('./middlewares/sseHeader');
 const cors = require('./middlewares/cors');
 const db = require('./libs/db');
 
@@ -37,8 +38,12 @@ app.use(async (ctx, next) => {
 // set CORS header
 app.use(cors());
 
+// set sse headers
+app.use(sseHeader());
+
 // routes
 app.use(routeClient.routes(), routeClient.allowedMethods());
 app.use(routeServer.routes(), routeServer.allowedMethods());
+
 
 module.exports = app;
