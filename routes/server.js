@@ -12,8 +12,8 @@ router
     const body = ctx.request.body;
     const ssid = ctx.cookies.get('ssid');
 
-    if (ssid && global.db[ssid]) {
-      global.db[ssid].send(JSON.stringify(body));
+    if (ssid && global.table[ssid]) {
+      global.table[ssid].send(JSON.stringify(body));
       ctx.body = { code: 0, message: 'success' };
     } else {
       ctx.body = { code: 1, message: 'cannot find client' };

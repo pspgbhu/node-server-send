@@ -18,7 +18,7 @@ router
 
     const ssid = ctx.cookies.get('ssid');
     if (ssid) {
-      global.db[ssid] = body;
+      global.table[ssid] = body;
     }
 
     body.send(JSON.stringify({ code: 0, message: 'success', ssid }), 'connected');
@@ -33,7 +33,7 @@ router
       body.end();
       socket.removeListener('error', close);
       socket.removeListener('close', close);
-      delete global.db[ssid];
+      delete global.table[ssid];
     }
   })
 ;
