@@ -10,7 +10,8 @@
   Hello World!
 </body>
 <script>
-    const url = '/alive/test';
+    document.cookie = 'ssid=' + Math.random().toString(36).substr(2);
+    const url = '/api/v1/alive/acceptdata';
     var source = new EventSource(url);
     source.addEventListener('open', function (event) {
       console.log('open');
@@ -20,7 +21,6 @@
       console.log('message');
     }, false);
     source.addEventListener('error', function (event) {
-      // handle error event
       console.log('error');
     });
 </script>

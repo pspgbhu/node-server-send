@@ -1,20 +1,32 @@
 const Koa = require('koa');
-const app = new Koa();
 const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
-const sseHeader = require('./middlewares/sseHeader');
+
+const sseMiddleware = require('./middlewares/sseMiddleware');
 const cors = require('./middlewares/cors');
-const db = require('./libs/db');
+const errorh = require('./middlewares/error');
+
 
 const routeClient = require('./routes/client');
 const routeServer = require('./routes/server');
 
+const os = require('os');
+const ifaces = os.networkInterfaces();
+
+require('./libs/db');
+
 global.table = {};
+global.IP = require('./libs/ip');
+
+console.log('本机IP: ', global.IP);
+
+const app = new Koa();
 
 // error handler
 onerror(app);
+app.use(errorh());
 
 // middlewares
 app.use(bodyparser({
@@ -39,7 +51,7 @@ app.use(async (ctx, next) => {
 app.use(cors());
 
 // set sse headers
-app.use(sseHeader());
+app.use(sseMiddleware());
 
 // routes
 app.use(routeClient.routes(), routeClient.allowedMethods());

@@ -1,14 +1,15 @@
 const redis = require('redis');
 const dbSettings = require('../config/db');
-// console.log(dbSettings);
 const client = redis.createClient(dbSettings);
 
+module.exports = client;
+
 client.on('error', err => {
-  console.log('Redis error  ', err);
+  console.log('Redis Error  ', err);
 });
 
 client.on('warning', warn => {
-  console.log('Redis warn  ', warn);
+  console.log('Redis Warn  ', warn);
 });
 
 client.on('connect', () => {
@@ -20,7 +21,15 @@ client.on('reconnecting', () => {
 });
 
 client.on('end', () => {
-  console.log('Redis server connection has closed.'); 
+  console.log('Redis server connection has closed.');
 });
 
-module.exports = client;
+client.$get = field => {
+  return new Promise((resolve, reject) => {
+    client.hgetall(field, (err, obj) => {
+      if (err) { reject(err) }
+      resolve(obj);
+    });
+  });
+};
+

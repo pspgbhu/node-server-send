@@ -11,8 +11,7 @@ const base = {
 };
 
 module.exports = Object.assign(
-  {}, 
-  base, 
+  base,
   process.env.NODE_ENV === 'production' ? prod : dev
 );
 

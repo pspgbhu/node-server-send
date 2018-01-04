@@ -3,34 +3,39 @@
  */
 
 const router = require('koa-router')();
+const db = require('../libs/db');
 const sse = require('../libs/sse');
+const apiConfig = require('../config/api');
 
-router.prefix('/alive');
+router.prefix(apiConfig.ALIVE_PREFIX);
 
-router
-  .get('/test', async (ctx) => {
-    // otherwise node will automatically close this connection in 10 minutes.
-    const body = ctx.body = new sse();
-    const ssid = ctx.cookies.get('ssid');
-    if (ssid) {
-      global.table[ssid] = body;
-    }
+router.get('/acceptdata', async (ctx) => {
+  const body = ctx.body = new sse();
+  const ssid = ctx.cookies.get('ssid');
 
-    body.send(JSON.stringify({ code: 0, message: 'success', ssid }), 'connected');
+  if (ssid) {
+    global.table[ssid] = body;
+    db.HMSET('xiaoleSSE', { [ssid]: global.IP });
+    db.$get('xiaoleSSE').then(obj => {
+      console.log('Redis xiaoleSSE :::', JSON.stringify(obj));
+    }).catch(e => {
+      console.log('Redis Get Error :::', )
+    });
+  }
 
-    // // if the connection closes or errors,
-    // // we stop the SSE.
-    const socket = ctx.socket;
-    socket.on('error', close);
-    socket.on('close', close);
+  body.send(JSON.stringify({ code: 0, msg: 'success' }), 'connected');
 
-    function close() {
-      body.end();
-      socket.removeListener('error', close);
-      socket.removeListener('close', close);
-      delete global.table[ssid];
-    }
-  })
-;
+  const socket = ctx.socket;
+  socket.on('error', close);
+  socket.on('close', close);
+
+  function close() {
+    body.end();
+    socket.removeListener('error', close);
+    socket.removeListener('close', close);
+    delete global.table[ssid];
+    db.HDEL('xiaoleSSE', ssid);
+  }
+});
 
 module.exports = router;
