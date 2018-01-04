@@ -6,8 +6,8 @@
       "NODE_ENV": "development",
       "PORT": "1601"
   },
-  "out_file": "/export/Logs/sku-scratch/out.log",
-  "error_file": "/export/Logs/sku-scratch/err.log",
+  "out_file": "/export/Logs/alpha-node/out.log",
+  "error_file": "/export/Logs/alpha-node/err.log",
   "merge_logs": true,
   "log_date_format": "YYYY-MM-DD HH:mm Z",
   "max_memory_restart" : "512M"
