@@ -17,7 +17,7 @@ Node 作为中间层与客户端建立 SSE 长连接，Java 层通过调用 Node
 | 事件名称 | 描述 | 返回值（JSON字符串） |
 | ---  | ---- | ---- |
 | connected | 长连接连接成功时返回 | { "code": "0", msg: "success" } |
-| message | 数据推送 | 参考这里 |
+| message | 数据推送 | [参考这里](http://cf.jd.com/pages/viewpage.action?pageId=98361460) |
 
 
 ## API For Server Side
