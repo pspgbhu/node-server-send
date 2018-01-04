@@ -10,6 +10,7 @@ Object.keys(ifaces).forEach(function (ifname) {
       return;
     }
 
+    console.log('Got IP: ', iface.address);
     ip = iface.address;
     // if (alias >= 1) {
     //   // this single interface has multiple ipv4 addresses
