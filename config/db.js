@@ -2,6 +2,7 @@ const DB_NAME = 'smart_sse';
 const PRE_DB_NAME = 'pre_smart_sse';
 
 const config = {
+  // 注意，这里目前统一使用的是预发布配置，上线前需要改过来！
   DB_NAME: process.env.NODE_ENV === 'production' ? PRE_DB_NAME : PRE_DB_NAME,
 };
 
@@ -18,7 +19,7 @@ const dev = {
 };
 const prod = { };
 
-
+// 注意，这里目前统一使用的是预发布配置，上线前需要改过来！
 config.opt = Object.assign(base, process.env.NODE_ENV === 'production' ? dev : dev);
 
 
