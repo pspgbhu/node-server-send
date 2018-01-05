@@ -11,6 +11,6 @@ module.exports = () => async (ctx, next) => {
     ctx.set('X-Accel-Buffering', 'no');
   }
 
-  console.log('SSE keys :::', Object.keys(global.table));
   await next();
+  console.log('IP:', global.IP, 'SSE keys:', Object.keys(global.table));
 };

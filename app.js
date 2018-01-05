@@ -1,19 +1,18 @@
 const Koa = require('koa');
 const json = require('koa-json');
-const onerror = require('koa-onerror');
+// const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+const path = require('path');
 
 const sseMiddleware = require('./middlewares/sseMiddleware');
 const cors = require('./middlewares/cors');
-const errorh = require('./middlewares/error');
-
+const err = require('./middlewares/err');
+// const errorHandler = require('./middlewares/errorHandler');
+const _404 = require('./middlewares/404');
 
 const routeClient = require('./routes/client');
 const routeServer = require('./routes/server');
-
-const os = require('os');
-const ifaces = os.networkInterfaces();
 
 require('./libs/db');
 
@@ -21,23 +20,24 @@ global.table = {};
 global.IP = require('./libs/ip');
 
 console.log('本机IP: ', global.IP);
+console.log('process.env.NODE_ENV ==', process.env.NODE_ENV);
 
 const app = new Koa();
 
 // error handler
-onerror(app);
-app.use(errorh());
+app.use(err());
+app.use(_404());
 
 // middlewares
 app.use(bodyparser({
-  enableTypes: ['json', 'form', 'text']
+  enableTypes: ['json', 'form', 'text'],
 }));
 app.use(json());
 app.use(logger());
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use(require('koa-static')(__dirname + '/public'))
-}
+// if (process.env.NODE_ENV !== 'production') {
+app.use(require('koa-static')(path.join('public')));
+// }
 
 // logger
 app.use(async (ctx, next) => {

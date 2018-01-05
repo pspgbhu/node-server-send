@@ -1,5 +1,6 @@
 const redis = require('redis');
-const dbSettings = require('../config/db');
+const dbSettings = require('../config/db').opt;
+
 const client = redis.createClient(dbSettings);
 
 module.exports = client;
@@ -24,12 +25,10 @@ client.on('end', () => {
   console.log('Redis server connection has closed.');
 });
 
-client.$get = field => {
-  return new Promise((resolve, reject) => {
-    client.hgetall(field, (err, obj) => {
-      if (err) { reject(err) }
-      resolve(obj);
-    });
+client.$get = field => new Promise((resolve, reject) => {
+  client.hgetall(field, (err, obj) => {
+    if (err) { reject(err); }
+    resolve(obj);
   });
-};
+});
 
