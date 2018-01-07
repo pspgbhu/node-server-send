@@ -28,7 +28,7 @@ Node 会将请求来的数据通过长链接透传至客户端上。
 
 | 调用方式 | 入参 | 接口 |
 | ----- | -- | --- |
-|  post  | 无（需携带cookie，同时 cookie 中应包含 ssid 字段）| /api/v1/server/postdata |
+|  post  | 无（需携带cookie，同时 cookie 中应包含 ssid 字段）| /api/v1/server/pushdata |
 
 
 **返回值：**
