@@ -1,18 +1,15 @@
 const Koa = require('koa');
 const json = require('koa-json');
-// const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const path = require('path');
 
-const sseMiddleware = require('./middlewares/sseMiddleware');
+// const sseMiddleware = require('./middlewares/sseMiddleware');
 const cors = require('./middlewares/cors');
 const err = require('./middlewares/err');
-// const errorHandler = require('./middlewares/errorHandler');
 const _404 = require('./middlewares/404');
 
-const routeClient = require('./routes/client');
-const routeServer = require('./routes/server');
+const routes = require('./routes');
 
 require('./libs/db');
 
@@ -35,9 +32,10 @@ app.use(bodyparser({
 app.use(json());
 app.use(logger());
 
-// if (process.env.NODE_ENV !== 'production') {
-app.use(require('koa-static')(path.join('public')));
-// }
+// 开发环境运行时挂载测试用 index.html
+if (process.env.NODE_ENV !== 'production') {
+  app.use(require('koa-static')(path.join('public')));
+}
 
 // logger
 app.use(async (ctx, next) => {
@@ -51,11 +49,10 @@ app.use(async (ctx, next) => {
 app.use(cors());
 
 // set sse headers
-app.use(sseMiddleware());
+// app.use(sseMiddleware());
 
 // routes
-app.use(routeClient.routes(), routeClient.allowedMethods());
-app.use(routeServer.routes(), routeServer.allowedMethods());
+app.use(routes.routes(), routes.allowedMethods());
 
 
 module.exports = app;

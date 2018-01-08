@@ -1,27 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
+
 <body>
-  Hello World!
+  <input type="text" id="input" placeholder="sse data">
+  <button onclick="pushdata()">推送数据</button>
+  <div id="content">
+  </div>
 </body>
 <script>
-    document.cookie = 'ssid=' + Math.random().toString(36).substr(2);
-    const url = '/api/v1/alive/acceptdata';
-    var source = new EventSource(url);
-    source.addEventListener('open', function (event) {
-      console.log('open');
-    }, false);
-    source.addEventListener('message', function (event) {
-      console.log(event);
-      console.log('message');
-    }, false);
-    source.addEventListener('error', function (event) {
-      console.log('error');
-    });
+  ssid = Math.random().toString(36).substr(2);
+  document.cookie = 'ssid=' + ssid;
+
+  const url = '/api/v1/acceptdata';
+  var source = new EventSource(url);
+
+  source.addEventListener('open', function (event) {
+    console.log('sse open');
+  }, false);
+  source.addEventListener('message', function (event) {
+    console.log(event);
+    var html = `<p>${event.data}</p>`;
+    content.innerHTML += html;
+  }, false);
+  source.addEventListener('error', function (event) {
+    console.log('sse error');
+  });
+
+  function pushdata() {
+    fetch('/api/v1/pushdata', {
+      method: 'post',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        ssid: ssid,
+        body: input.value,
+      })
+    }).then(res => res.json())
+      .then(json => {
+        if (json.code === '0') {
+          console.log('上报成功');
+        }
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  }
 </script>
+
 </html>

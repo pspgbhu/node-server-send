@@ -1,35 +1,54 @@
-# 夏普晓乐 Node 中间层
+# SSE 推送系统
 
-Node 作为中间层与客户端建立 SSE 长连接，Java 层通过调用 Node 层接口来向客户端下发数据。
+该系统可以同客户端建立 SSE 长连接，不仅该系统自己可以向客户端推送数据，还支持调用接口推送数据给特定的客户端。
 
-## API For Client
+## API
 
-### 接受语音控制数据推送
+### 建立 SSE 长连接
 
-客户端通过 SSE 长连接来接受语音控制的数据推送
+客户端调用接口以建议和该系统间的长连接。
 
 | 调用方式 | 入参 | 接口 |
 | ----- | -- | --- |
-|  SSE  | 无（需携带cookie）| /api/v1/alive/acceptdata |
+|  SSE  | 无（需携带cookie）| /api/v1/acceptdata |
 
 **SSE 事件：**
 
-| 事件名称 | 描述 | 返回值（JSON字符串） |
+| 事件名称 | 描述 | 返回值 |
 | ---  | ---- | ---- |
-| connected | 长连接连接成功时返回 | { "code": "0", msg: "success" } |
-| message | 数据推送 | [参考这里](http://cf.jd.com/pages/viewpage.action?pageId=98361460) |
+| connected | 长连接连接成功时返回 | JSON `{ "code": "0", msg: "success" }` |
+| message | 数据推送 | JSON 或 String |
 
 
-## API For Server Side
+```javascript
+var source = new EventSource('/api/v1/alive/acceptdata');
+source.addEventListener('open', function (event) {
+  console.log('open');
+}, false);
+source.addEventListener('message', function (event) {
+  console.log(event);
+  console.log('message');
+}, false);
+source.addEventListener('error', function (event) {
+  console.log('error');
+});
+```
 
-### 通过 SSE 向客户端下发数据
+
+### 向特定客户端下发数据
 
 Node 会将请求来的数据通过长链接透传至客户端上。
 
 | 调用方式 | 入参 | 接口 |
 | ----- | -- | --- |
-|  post  | 无（需携带cookie，同时 cookie 中应包含 ssid 字段）| /api/v1/server/pushdata |
+|  post  | 见下表 | /api/v1/pushdata |
 
+**入参：**
+
+| 参数名 | 类型 | 描述 |
+| ----- | -- | -- |
+| ssid | String | 数据推向的客户端 ssid |
+| data | String | 下发的数据 |
 
 **返回值：**
 
@@ -43,8 +62,8 @@ Node 会将请求来的数据通过长链接透传至客户端上。
 | code 值（都是字符串类型）| 备注 |
 | ----- | -- |
 | 0       | 成功 |
-| 1       | 参数错误，即没有携带 cookie 或 cookie 中未包含 ssid 字段  |
-| 10       | 未发现对应的客户端长连接  |
+| 1       | 参数错误 |
+| 10      | 未发现对应的客户端长连接  |
 | -1      | 系统异常 |
 
 

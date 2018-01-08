@@ -3,16 +3,17 @@
  */
 
 const router = require('koa-router')();
-const db = require('../libs/db');
-const SSE = require('../libs/sse');
-const apiConfig = require('../config/api');
-const DB_NAME = require('../config/db').DB_NAME;
+const db = require('../../libs/db');
+const { setSSEHeader } = require('../../utils/router');
+const SSE = require('../../libs/sse');
+const DB_NAME = require('../../config/db').DB_NAME;
 
 module.exports = router;
 
-router.prefix(apiConfig.ALIVE_PREFIX);
-
-router.get('/acceptdata', async (ctx) => {
+/**
+ * 建立长连接接口
+ */
+router.get('/acceptdata', setSSEHeader, (ctx) => {
   const body = ctx.body = new SSE();
   const ssid = ctx.cookies.get('ssid');
 
@@ -45,5 +46,6 @@ router.get('/acceptdata', async (ctx) => {
     delete global.table[ssid];
     db.HDEL(DB_NAME, ssid);
   }
-});
+},
+);
 
