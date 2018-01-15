@@ -1,5 +1,5 @@
 const redis = require('redis');
-const dbSettings = require('../config/db').opt;
+const dbSettings = require('../config').opt;
 
 const client = redis.createClient(dbSettings);
 

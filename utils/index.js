@@ -1,5 +1,5 @@
 const db = require('../libs/db');
-const DB_NAME = require('../config/db').DB_NAME;
+const DB_NAME = require('../config').DB_NAME;
 
 /**
  * 向特定的客户端推送数据

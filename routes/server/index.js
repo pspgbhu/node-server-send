@@ -3,7 +3,7 @@
  */
 const router = require('koa-router')();
 const { findInstance } = require('../../utils');
-const { ALIVE_PREFIX, SERVER_PREFIX } = require('../../config');
+const { API_PREFIX } = require('../../config');
 
 
 module.exports = router;
@@ -34,7 +34,7 @@ router.post('/pushdata', async (ctx, next) => {
     // 找到了，302 重定向到正确的内网服务器
     const ip = await findInstance(ssid);
     const protocol = ctx.protocol;
-    const url = `${protocol}://${ip}/${ALIVE_PREFIX}/pushdata`;
+    const url = `${protocol}://${ip}/${API_PREFIX}/pushdata`;
 
     console.log(`IP ${global.IP} redirect to`, url);
 

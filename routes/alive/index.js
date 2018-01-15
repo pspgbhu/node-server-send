@@ -6,7 +6,7 @@ const router = require('koa-router')();
 const db = require('../../libs/db');
 const { setSSEHeader } = require('../../utils/router');
 const SSE = require('../../libs/sse');
-const DB_NAME = require('../../config/db').DB_NAME;
+const DB_NAME = require('../../config').DB_NAME;
 
 module.exports = router;
 
