@@ -3,7 +3,7 @@
  */
 const router = require('koa-router')();
 const { findInstance } = require('../../utils');
-const { API_PREFIX } = require('../../config');
+const { API_PREFIX, isUseRedis } = require('../../config');
 
 
 module.exports = router;
@@ -29,7 +29,12 @@ router.post('/pushdata', async (ctx, next) => {
     return;
   }
 
-  // 本地没有 ssid 对应关系的话，就去 redis 里面找
+  if (!isUseRedis) {
+    ctx.body = { code: '10', msg: 'cannot find client' };
+    return;
+  }
+
+  // 本地没有 ssid 对应关系的话，且启用了 redis，就去 redis 里面找
   try {
     // 找到了，302 重定向到正确的内网服务器
     const ip = await findInstance(ssid);

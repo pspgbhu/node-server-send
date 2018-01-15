@@ -3,10 +3,10 @@
  */
 
 const router = require('koa-router')();
-const db = require('../../libs/db');
+const redis = require('../../libs/db');
 const { setSSEHeader } = require('../../utils/router');
 const SSE = require('../../libs/sse');
-const DB_NAME = require('../../config').DB_NAME;
+const { isUseRedis, DB_NAME } = require('../../config').DB_NAME;
 
 module.exports = router;
 
@@ -20,10 +20,12 @@ router.get('/acceptdata', setSSEHeader, (ctx) => {
   if (ssid) {
     // setting ssid to local cache & redis
     global.table[ssid] = body;
-    db.HMSET(DB_NAME, { [ssid]: global.IP });
+  }
 
+  if (ssid && isUseRedis) {
+    redis.HMSET(DB_NAME, { [ssid]: global.IP });
     // log local cache & redis
-    db.$get(DB_NAME).then(obj => {
+    redis.$get(DB_NAME).then(obj => {
       console.log(`Redis ${DB_NAME} :::`, JSON.stringify(obj));
     }).catch(e => {
       console.log('Redis Get Error :::', e);
@@ -44,8 +46,9 @@ router.get('/acceptdata', setSSEHeader, (ctx) => {
     socket.removeListener('close', close);
     // 从本地缓存和 Redis 中移除对象
     delete global.table[ssid];
-    db.HDEL(DB_NAME, ssid);
-  }
-},
-);
 
+    if (isUseRedis) {
+      redis.HDEL(DB_NAME, ssid);
+    }
+  }
+});

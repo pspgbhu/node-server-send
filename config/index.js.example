@@ -1,9 +1,10 @@
 module.exports = {
   API_PREFIX: '/api/v1',
-  DB_NAME: 'sse_db',
 
   // redis config
-  opt: {
+  isUseRedis: false,
+  DB_NAME: 'sse_db',
+  RedisOpts: {
     no_ready_check: true,
     port: 5360,
     host: '',

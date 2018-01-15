@@ -3,8 +3,9 @@ const { API_PREFIX } = require('../config');
 const alive = require('./alive');
 const server = require('./server');
 
-
 module.exports = router;
 
-router.use(`${API_PREFIX}`, alive.routes(), alive.allowedMethods());
-router.use(`${API_PREFIX}`, server.routes(), server.allowedMethods());
+router.prefix(API_PREFIX);
+
+router.use(alive.routes(), alive.allowedMethods());
+router.use(server.routes(), server.allowedMethods());

@@ -4,7 +4,6 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const path = require('path');
 
-// const sseMiddleware = require('./middlewares/sseMiddleware');
 const cors = require('./middlewares/cors');
 const err = require('./middlewares/err');
 const _404 = require('./middlewares/404');
@@ -18,6 +17,11 @@ global.IP = require('./libs/ip');
 
 console.log('本机IP: ', global.IP);
 console.log('process.env.NODE_ENV ==', process.env.NODE_ENV);
+
+if (process.env.NODE_ENV !== 'production') {
+  console.log('\n     打开调试页面: http://localhost:3000\n');
+}
+
 
 const app = new Koa();
 
