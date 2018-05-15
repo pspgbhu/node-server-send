@@ -6,7 +6,7 @@ const router = require('koa-router')();
 const redis = require('../../libs/db');
 const { setSSEHeader } = require('../../utils/router');
 const SSE = require('../../libs/sse');
-const { isUseRedis, DB_NAME } = require('../../config').DB_NAME;
+const { isUseRedis, DB_NAME } = require('../../config');
 
 module.exports = router;
 
